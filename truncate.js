@@ -20,7 +20,7 @@
 
   function truncateWordChunk(str,ellipsis){
 
-    var endChunk = str.substr( text.lastIndexOf(" "),text.length-1 );
+    var endChunk = str.substr( str.lastIndexOf(" "),str.length-1 );
     str = str.replace(endChunk,ellipsis);
 
     return str;
