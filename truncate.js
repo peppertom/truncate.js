@@ -13,7 +13,24 @@
     return text.replace(/\s*$/,"");
   }
 
-  function setText(element, text) {
+  function replaceNbsps(str) {
+    var rep = new RegExp(String.fromCharCode(160), "g");
+    return str.replace(rep, " ");
+  }
+
+  function truncateWordChunk(str,ellipsis){
+
+    var endChunk = str.substr( text.lastIndexOf(" "),text.length-1 );
+    str = str.replace(endChunk,ellipsis);
+
+    return str;
+  }
+
+  function setText(element, text, options) {
+    if ( options.wrap === 'word' ){
+      text = replaceNbsps(text);
+      text = truncateWordChunk(text,options.ellipsis);
+    }
     if (element.innerText) {
       element.innerText = text;
     } else if (element.nodeValue) {
@@ -66,7 +83,7 @@
 
         // Because traversal is in-order so the algorithm already checked that
         // this point meets the height requirement. As such, it's safe to truncate here.
-        setText($prevSibling[0], $prevSibling.text() + options.ellipsis);
+        setText($prevSibling[0], $prevSibling.text() + options.ellipsis, options);
         $parent.remove();
 
         if ($clipNode.length) {
@@ -93,7 +110,7 @@
       mid = low + ((high - low) >> 1); // Integer division
 
       chunk = options.ellipsis + trimRight(original.substr(mid - 1, original.length));
-      setText(element, chunk);
+      setText(element, chunk, options);
 
       if ($rootNode.height() > options.maxHeight) {
         // too big, reduce the chunk
@@ -107,7 +124,7 @@
     }
 
     if (maxChunk.length > 0) {
-      setText(element, maxChunk);
+      setText(element, maxChunk, options);
       return true;
     } else {
       return truncateNearestSibling($element, $rootNode, $clipNode, options);
@@ -129,7 +146,7 @@
       mid = low + ((high - low) >> 1); // Integer division
 
       chunk = trimRight(original.substr(0, mid + 1)) + options.ellipsis;
-      setText(element, chunk);
+      setText(element, chunk, options);
 
       if ($rootNode.height() > options.maxHeight) {
         // too big, reduce the chunk
@@ -142,7 +159,7 @@
     }
 
     if (maxChunk.length > 0) {
-      setText(element, maxChunk);
+      setText(element, maxChunk, options);
       return true;
     } else {
       return truncateNearestSibling($element, $rootNode, $clipNode, options);
@@ -164,7 +181,7 @@
       mid = low + ((high - low) >> 1); // Integer division
 
       chunk = trimRight(original.substr(0, mid)) + options.ellipsis + original.substr(len - mid, len - mid);
-      setText(element, chunk);
+      setText(element, chunk, options);
 
       if ($rootNode.height() > options.maxHeight) {
         // too big, reduce the chunk
@@ -179,7 +196,7 @@
     }
 
     if (maxChunk.length > 0) {
-      setText(element, maxChunk);
+      setText(element, maxChunk, options);
       return true;
     } else {
       return truncateNearestSibling($element, $rootNode, $clipNode, options);
@@ -351,7 +368,8 @@
    *     ellipsis: '… ',
    *     showMore: '<a class="show-more">Show More</a>',
    *     showLess: '<a class="show-less">Show Less</a>',
-   *     position: "start"
+   *     position: "start",
+   *     wrap: 'letter'
    *   });
    *
    *   // Update HTML
@@ -377,7 +395,8 @@
       showMore: '',
       showLess: '',
       position: 'end',
-      lineHeight: 'auto'
+      lineHeight: 'auto',
+      wrap: 'letter'
     };
 
     this.config(options);
@@ -403,7 +422,7 @@
 
       if (this.options.lineHeight === 'auto') {
         var lineHeightCss = this.$element.css('line-height'),
-          lineHeight = 18; // for Normal we return the default value: 18px
+            lineHeight = 18; // for Normal we return the default value: 18px
 
         if (lineHeightCss !== "normal") {
           lineHeight = parseInt(lineHeightCss, 10);
@@ -418,6 +437,10 @@
 
       if (this.options.position !== 'start' && this.options.position !== 'middle' && this.options.position !== 'end') {
         this.options.position = 'end';
+      }
+
+      if (this.options.wrap === undefined) {
+        this.options.wrap = 'letter';
       }
 
       this.$clipNode = $($.parseHTML(this.options.showMore), this.$element);
@@ -514,7 +537,7 @@
      */
     collapse: function (retruncate) {
       this.isExplicitlyCollapsed = true;
-      
+
       if (this.isCollapsed) {
         return;
       }
