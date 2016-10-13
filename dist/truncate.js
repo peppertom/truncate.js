@@ -369,7 +369,7 @@
    *     showMore: '<a class="show-more">Show More</a>',
    *     showLess: '<a class="show-less">Show Less</a>',
    *     position: "start",
-   *     wrap: 'word'
+   *     wrap: 'letter'
    *   });
    *
    *   // Update HTML
@@ -396,7 +396,7 @@
       showLess: '',
       position: 'end',
       lineHeight: 'auto',
-      wrap: 'word'
+      wrap: 'letter'
     };
 
     this.config(options);
@@ -440,7 +440,7 @@
       }
 
       if (this.options.wrap === undefined) {
-        this.options.wrap = 'word';
+        this.options.wrap = 'letter';
       }
 
       this.$clipNode = $($.parseHTML(this.options.showMore), this.$element);
