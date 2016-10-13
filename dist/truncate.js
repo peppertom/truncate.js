@@ -18,7 +18,10 @@
     return str.replace(rep, " ");
   }
 
-  function setText(element, text) {
+  function setText(element, text, options) {
+    if ( options.wrap === 'word' ){
+      text = replaceNbsps(text);
+    }
     if (element.innerText) {
       element.innerText = text;
     } else if (element.nodeValue) {
@@ -71,7 +74,7 @@
 
         // Because traversal is in-order so the algorithm already checked that
         // this point meets the height requirement. As such, it's safe to truncate here.
-        setText($prevSibling[0], $prevSibling.text() + options.ellipsis);
+        setText($prevSibling[0], $prevSibling.text() + options.ellipsis, options);
         $parent.remove();
 
         if ($clipNode.length) {
@@ -98,7 +101,7 @@
       mid = low + ((high - low) >> 1); // Integer division
 
       chunk = options.ellipsis + trimRight(original.substr(mid - 1, original.length));
-      setText(element, chunk);
+      setText(element, chunk, options);
 
       if ($rootNode.height() > options.maxHeight) {
         // too big, reduce the chunk
@@ -112,7 +115,7 @@
     }
 
     if (maxChunk.length > 0) {
-      setText(element, maxChunk);
+      setText(element, maxChunk, options);
       return true;
     } else {
       return truncateNearestSibling($element, $rootNode, $clipNode, options);
@@ -134,7 +137,7 @@
       mid = low + ((high - low) >> 1); // Integer division
 
       chunk = trimRight(original.substr(0, mid + 1)) + options.ellipsis;
-      setText(element, chunk);
+      setText(element, chunk, options);
 
       if ($rootNode.height() > options.maxHeight) {
         // too big, reduce the chunk
@@ -147,7 +150,7 @@
     }
 
     if (maxChunk.length > 0) {
-      setText(element, maxChunk);
+      setText(element, maxChunk, options);
       return true;
     } else {
       return truncateNearestSibling($element, $rootNode, $clipNode, options);
@@ -169,7 +172,7 @@
       mid = low + ((high - low) >> 1); // Integer division
 
       chunk = trimRight(original.substr(0, mid)) + options.ellipsis + original.substr(len - mid, len - mid);
-      setText(element, chunk);
+      setText(element, chunk, options);
 
       if ($rootNode.height() > options.maxHeight) {
         // too big, reduce the chunk
@@ -184,7 +187,7 @@
     }
 
     if (maxChunk.length > 0) {
-      setText(element, maxChunk);
+      setText(element, maxChunk, options);
       return true;
     } else {
       return truncateNearestSibling($element, $rootNode, $clipNode, options);
