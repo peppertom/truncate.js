@@ -351,7 +351,8 @@
    *     ellipsis: '… ',
    *     showMore: '<a class="show-more">Show More</a>',
    *     showLess: '<a class="show-less">Show Less</a>',
-   *     position: "start"
+   *     position: "start",
+   *     wrap: 'word'
    *   });
    *
    *   // Update HTML
@@ -377,7 +378,8 @@
       showMore: '',
       showLess: '',
       position: 'end',
-      lineHeight: 'auto'
+      lineHeight: 'auto',
+      wrap: 'word'
     };
 
     this.config(options);
@@ -418,6 +420,10 @@
 
       if (this.options.position !== 'start' && this.options.position !== 'middle' && this.options.position !== 'end') {
         this.options.position = 'end';
+      }
+
+      if (this.options.wrap === undefined) {
+        this.options.wrap = 'word';
       }
 
       this.$clipNode = $($.parseHTML(this.options.showMore), this.$element);
@@ -514,7 +520,7 @@
      */
     collapse: function (retruncate) {
       this.isExplicitlyCollapsed = true;
-      
+
       if (this.isCollapsed) {
         return;
       }
