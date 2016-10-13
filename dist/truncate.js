@@ -13,6 +13,11 @@
     return text.replace(/\s*$/,"");
   }
 
+  function replaceNbsps(str) {
+    var rep = new RegExp(String.fromCharCode(160), "g");
+    return str.replace(rep, " ");
+  }
+
   function setText(element, text) {
     if (element.innerText) {
       element.innerText = text;
