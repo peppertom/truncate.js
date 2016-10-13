@@ -18,6 +18,14 @@
     return str.replace(rep, " ");
   }
 
+  function truncateWordChunk(str,ellipsis){
+
+    var endChunk = str.substr( text.lastIndexOf(" "),text.length-1 );
+    str = str.replace(endChunk,ellipsis);
+
+    return str;
+  }
+
   function setText(element, text, options) {
     if ( options.wrap === 'word' ){
       text = replaceNbsps(text);
