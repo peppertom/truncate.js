@@ -422,7 +422,7 @@
 
       if (this.options.lineHeight === 'auto') {
         var lineHeightCss = this.$element.css('line-height'),
-          lineHeight = 18; // for Normal we return the default value: 18px
+            lineHeight = 18; // for Normal we return the default value: 18px
 
         if (lineHeightCss !== "normal") {
           lineHeight = parseInt(lineHeightCss, 10);

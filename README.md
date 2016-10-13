@@ -59,6 +59,7 @@ Truncate.js currently depends on jQuery. There are two ways to use Truncate.js:
 - `showLess`: HTML to insert when .expand() is called. Useful for a "Show Less" button. _default: ""_
 - `position`: Position of the truncation. Possible values: `start`, `middle`, `end`. _default: "end"_
 - `maxHeight`: Truncate the content to fit in the specified height (in px).
+- `wrap`: Prevent words to be broken at truncation. Content breaks on full words if wrap is set to `word`. _default: "letter"_
 
 ----
 
