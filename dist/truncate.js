@@ -29,6 +29,7 @@
   function setText(element, text, options) {
     if ( options.wrap === 'word' ){
       text = replaceNbsps(text);
+      text = truncateWordChunk(text,options.ellipsis);
     }
     if (element.innerText) {
       element.innerText = text;
